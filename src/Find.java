@@ -56,6 +56,8 @@ public class Find {
                 i++;
             } else if (listaTipos.get(i) == CharacterTipo.Tipo.INTERROGANTE) {
                 listaFinal.add('®');
+            } else if (listaTipos.get(i) == CharacterTipo.Tipo.PORCENTAJE) {
+                listaFinal.add()
             }
         }
 
@@ -73,6 +75,8 @@ public class Find {
                 listaTipos.add(CharacterTipo.Tipo.ARROBA);
             } else if (text.charAt(i) == '?') {
                 listaTipos.add(CharacterTipo.Tipo.INTERROGANTE);
+            } else if (text.charAt(i) == '%') {
+                listaTipos.add(CharacterTipo.Tipo.PORCENTAJE);
             } else {
                 listaTipos.add(CharacterTipo.Tipo.ALFANUMERICO);
             }

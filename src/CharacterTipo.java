@@ -4,7 +4,8 @@ public class CharacterTipo {
     enum Tipo{
         INTERROGANTE,
         ARROBA,
-        ALFANUMERICO
+        ALFANUMERICO,
+        PORCENTAJE
     }
     private Tipo tipo;
 
