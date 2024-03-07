@@ -10,7 +10,7 @@ public class Find {
     public boolean match(String stringPat) {
         boolean sonIguales = false;
         ArrayList<Character> listaText = crearList(text);
-        ArrayList<Character> listaMatch = checkMatch(stringPat);
+        ArrayList<Character> listaMatch = checkMatch(stringPat, text);
 
         if (listaMatch.size() > listaText.size() || listaMatch.isEmpty()) {
             return false;
@@ -43,13 +43,13 @@ public class Find {
         return listaFinal;
     }
 
-    public ArrayList<Character> checkMatch(String text){
+    public ArrayList<Character> checkMatch(String text, String frase){
         ArrayList<CharacterTipo.Tipo> listaTipos = clasificarCaracteres(text);
         ArrayList<Character> listaText = crearList(text);
         ArrayList<Character> listaFinal = new ArrayList<>();
 
         for (int i = 0; i < listaTipos.size(); i++) {
-            if (listaTipos.get(i) == CharacterTipo.Tipo.ALFANUMERICO){
+            if (listaTipos.get(i) == CharacterTipo.Tipo.ALFANUMERICO || listaTipos.get(i) == CharacterTipo.Tipo.ESPACIO){
                 listaFinal.add(listaText.get(i));
             } else if (listaTipos.get(i) == CharacterTipo.Tipo.ARROBA) {
                 listaFinal.add(listaText.get(i+1));
@@ -57,7 +57,13 @@ public class Find {
             } else if (listaTipos.get(i) == CharacterTipo.Tipo.INTERROGANTE) {
                 listaFinal.add('®');
             } else if (listaTipos.get(i) == CharacterTipo.Tipo.PORCENTAJE) {
-                listaFinal.add()
+                char letraMayuscula = Character.toUpperCase(listaText.get(i+1));
+                listaFinal.add(letraMayuscula);
+                i++;
+            } else if (listaTipos.get(i) == CharacterTipo.Tipo.DOLAR) {
+                if (i+1 != listaTipos.size()){
+                    listaFinal.add(listaText.get(i));
+                }
             }
         }
 
@@ -77,6 +83,10 @@ public class Find {
                 listaTipos.add(CharacterTipo.Tipo.INTERROGANTE);
             } else if (text.charAt(i) == '%') {
                 listaTipos.add(CharacterTipo.Tipo.PORCENTAJE);
+            } else if (text.charAt(i) == '$') {
+                listaTipos.add(CharacterTipo.Tipo.DOLAR);
+            } else if (text.charAt(i) == ' ') {
+                listaTipos.add(CharacterTipo.Tipo.ESPACIO);
             } else {
                 listaTipos.add(CharacterTipo.Tipo.ALFANUMERICO);
             }

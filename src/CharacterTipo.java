@@ -5,7 +5,9 @@ public class CharacterTipo {
         INTERROGANTE,
         ARROBA,
         ALFANUMERICO,
-        PORCENTAJE
+        PORCENTAJE,
+        DOLAR,
+        ESPACIO
     }
     private Tipo tipo;
 
