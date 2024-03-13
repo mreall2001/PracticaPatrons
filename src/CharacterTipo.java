@@ -7,15 +7,14 @@ public class CharacterTipo {
         ALFANUMERICO,
         PORCENTAJE,
         DOLAR,
-        ESPACIO
+        CORCHETE
     }
     private Tipo tipo;
+    char ch;
+    String set = "";
 
     public CharacterTipo (Tipo tipo){
         this.tipo = tipo;
     }
-
-
-
 
 }

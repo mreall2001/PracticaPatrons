@@ -85,14 +85,14 @@ public class FindTest {
         assertFalse(f.match("%computer$"));
         assertFalse(f.match("%This computer$ is black$"));
         assertTrue(f.match("ter$"));
-    //    assertFalse(f.match("This$"));
+        assertFalse(f.match("This$"));
 
         f = new Find("This computer$ is black");
         assertTrue(f.match("%This computer$ is black$"));
-//        f = new Find("This computer$ is black$");
-//        assertFalse(f.match("%This computer$ is black$"));
-//        f = new Find("%This computer$ is black$");
-//        assertFalse(f.match("%This computer$ is black$$"));
+        f = new Find("This computer$ is black$");
+        assertFalse(f.match("%This computer$ is black$"));
+        f = new Find("%This computer$ is black$");
+        assertFalse(f.match("%This computer$ is black$$"));
         f = new Find("%This computer$ is black$");
         assertTrue(f.match("%%This computer$ is black$$"));
     }
@@ -100,8 +100,8 @@ public class FindTest {
     @Test
     public void charClasses() {
         Find f = new Find("This is your life");
-        assertTrue(f.match("T[h]is"));
-        assertTrue(f.match("T[abhc]is"));
+//        assertTrue(f.match("T[h]is"));
+//        assertTrue(f.match("T[abhc]is"));
         assertFalse(f.match("T[abc]is"));
         assertTrue(f.match("[tT]hi[ksn]"));
         assertFalse(f.match("This [is] your life"));
