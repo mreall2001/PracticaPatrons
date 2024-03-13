@@ -17,7 +17,7 @@ public class Find {
 
         for (int i = 0; i < text.length(); i++) {
             if (sonIguales)break;
-            if (text.charAt(i) == listaMatch.get(0).ch || listaMatch.get(0).ch == '®' || listaMatch.get(0).ch == '['){
+            if (text.charAt(i) == listaMatch.get(0).ch || listaMatch.get(0).ch == '®' || listaMatch.get(0).ch == '▓'){
                 for (int j = 0; j < listaMatch.size(); j++) {
                     if (listaMatch.get(j).ch == '®'){
                         sonIguales = true;
@@ -42,7 +42,6 @@ public class Find {
                 }
             }
         }
-
         return sonIguales;
     }
 
@@ -86,9 +85,12 @@ public class Find {
                     } else {
                         t.set += stringPath.charAt(j);
                     }
-
                 }
-                t.ch = '▓';
+                if (checkClaudator(t.set) == true){
+
+                }else{
+                    t.ch = '▓';
+                }
                 listaTipos.add(t);
                 System.out.println(t.set);
             } else {
@@ -100,8 +102,14 @@ public class Find {
         return listaTipos;
     }
 
+    private boolean checkClaudator(String set) {
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i-1) == '['){
 
-
+            }
+        }
+        return false;
+    }
 
 
     public String capture(String stringPat) {
