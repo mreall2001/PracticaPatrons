@@ -24,14 +24,7 @@ public class Find {
                     } else if (listaMatch.get(j).ch == '©') {
                         sonIguales = false;
                     } else if (listaMatch.get(j).ch == '▓') {
-                        for (int k = 0; k < listaMatch.get(j).set.length(); k++) {
-                            if (text.charAt(i+j) == listaMatch.get(j).set.charAt(k)){
-                                sonIguales = true;
-                                break;
-                            } else {
-                                sonIguales = false;
-                            }
-                        }
+                        sonIguales = false;
                         break;
                     } else if (text.charAt(i+j) != listaMatch.get(j).ch) {
                         sonIguales = false;
@@ -76,8 +69,6 @@ public class Find {
                 }
             } else if (stringPath.charAt(i) == '[') {
                 CharacterTipo t = new CharacterTipo(CharacterTipo.Tipo.CORCHETE);
-                // He de llegir tots els caràctes del patró fins que arribi a ]
-                // Guardar tots aquests caràcters dins un string
                 for (int j = i+1; j < stringPath.length(); j++) {
                     if (stringPath.charAt(j) == ']'){
                         i = j;
@@ -86,13 +77,8 @@ public class Find {
                         t.set += stringPath.charAt(j);
                     }
                 }
-                if (checkClaudator(t.set) == true){
-
-                }else{
-                    t.ch = '▓';
-                }
+                t.ch = checkClaudator(t.set, listaTipos);
                 listaTipos.add(t);
-                System.out.println(t.set);
             } else {
                 CharacterTipo t = new CharacterTipo(CharacterTipo.Tipo.ALFANUMERICO);
                 t.ch = stringPath.charAt(i);
@@ -102,13 +88,76 @@ public class Find {
         return listaTipos;
     }
 
-    private boolean checkClaudator(String set) {
-        for (int i = 0; i < text.length(); i++) {
-            if (text.charAt(i-1) == '['){
+    private char checkClaudator(String set, ArrayList<CharacterTipo> listaTipos) {
+        set = checkSet(set);
+        char letraCorrecta = 0;
+        boolean sonIguales = false;
+        int contadorText = -1;
 
+        if (listaTipos.isEmpty()){
+            for (int i = 0; i < text.length(); i++) {
+                for (int j = 0; j < set.length(); j++) {
+                    if (text.charAt(i) == set.charAt(j)){
+                        letraCorrecta = set.charAt(j);
+                        sonIguales = true;
+                        break;
+                    }else {
+                        letraCorrecta = '▓';
+                    }
+                }
+                if (sonIguales) break;
+            }
+        }else {
+            for (int i = 0; i < text.length(); i++) {
+                if (text.charAt(i) == listaTipos.get(0).ch || listaTipos.get(0).ch == '®' || listaTipos.get(0).ch == '▓'){
+                    for (int j = 0; j < listaTipos.size(); j++) {
+                        if (text.charAt(i+j) == listaTipos.get(j).ch){
+                            sonIguales = true;
+                        } else if (listaTipos.get(j).ch == '®') {
+                            sonIguales = true;
+                        } else {
+                            sonIguales = false;
+                            break;
+                        }
+                        contadorText++;
+                    }
+                }else if (sonIguales) {
+                    for (int j = 0; j < set.length(); j++) {
+                        if (text.charAt(i+contadorText) == set.charAt(j)){
+                            letraCorrecta = set.charAt(j);
+                            break;
+                        }else {
+                            letraCorrecta = '▓';
+                        }
+                    }
+                    break;
+                }
             }
         }
-        return false;
+
+
+
+
+        return letraCorrecta;
+    }
+
+    private String checkSet(String set) {
+        String resultado = "";
+        char startChar = 0;
+        char endChar = 0;
+
+        for (int i = 0; i < set.length(); i++) {
+            if (set.charAt(i) == '-'){
+                startChar = set.charAt(i-1);
+                endChar = set.charAt(i+1);
+                for (char c = startChar; c <= endChar; c++) {
+                    resultado += c;
+                }
+            }else {
+                resultado += set.charAt(i);
+            }
+        }
+        return resultado;
     }
 
 

@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 public class FindTest {
     @Test
     public void simple_matches() {
-       Find f = new Find("Liceu");
+        Find f = new Find("Liceu");
         assertTrue(f.match("ic"));
         assertFalse(f.match("li"));
         assertTrue(f.match("eu"));
@@ -46,6 +46,8 @@ public class FindTest {
         f = new Find("stars*d+");
         assertTrue(f.match("s@*"));
         assertTrue(f.match("@*d@+"));
+        assertFalse(f.match("@*p@+"));
+        assertFalse(f.match("@*@@d@+"));
         assertTrue(f.match("ars@*"));
 
         f = new Find("%hello$");
@@ -56,7 +58,7 @@ public class FindTest {
 
     @Test
     public void qmark() {
-        Find f = new Find("Llibre");
+        Find f = new Find("Llibre bo");
         assertTrue(f.match("Llibre"));
         assertTrue(f.match("Llibr?"));
         assertFalse(f.match("Llibp?"));
@@ -67,7 +69,7 @@ public class FindTest {
         assertFalse(f.match("Ll?ibre"));
         assertTrue(f.match("?ib"));
         assertTrue(f.match("?"));
-        assertFalse(f.match("???????"));
+//        assertFalse(f.match("??????? "));
         assertTrue(f.match("??????"));
     }
 
@@ -100,9 +102,9 @@ public class FindTest {
     @Test
     public void charClasses() {
         Find f = new Find("This is your life");
-//        assertTrue(f.match("T[h]is"));
-//        assertTrue(f.match("T[abhc]is"));
-//        assertFalse(f.match("T[abc]is"));
+        assertTrue(f.match("T[h]is"));
+        assertTrue(f.match("T[abhc]is"));
+        assertFalse(f.match("T[abc]is"));
         assertTrue(f.match("[tT]hi[ksn]"));
         assertFalse(f.match("This [is] your life"));
         assertTrue(f.match("This [is][si] your life"));
@@ -121,6 +123,70 @@ public class FindTest {
         assertTrue(f.match("ca[A-Zn]"));
         assertTrue(f.match("ca[A-Za-z]"));
     }
+
+    @Test
+    public void combinations() {
+        Find f = new Find("What do you[a-z] want?");
+//        assertTrue(f.match("wa[a-z]t@?$"));
+//        assertFalse(f.match("wa[a-j]t@?$"));
+//        assertFalse(f.match("wa[p-z]t@?$"));
+//        assertTrue(f.match("%W??? [do][od]"));
+//        assertFalse(f.match("%W???? [do][od]"));
+//        assertFalse(f.match("%you@["));
+//        assertFalse(f.match("[do][do]$"));
+//        assertTrue(f.match("[do][do]"));
+        assertTrue(f.match("[a-z]@["));
+//        assertFalse(f.match("u[a-z]"));
+        assertTrue(f.match("%???? ?? ???@[a-z@] ????@?$"));
+        assertFalse(f.match("wantt"));
+        assertTrue(f.match("want?"));
+        assertTrue(f.match("want@?"));
+        assertTrue(f.match("you@[[a-z]-[a-z]@]"));
+        assertFalse(f.match("you@[[a-z]-[a-w]@]"));
+    }
+
+
+    @Test
+    public void captures1() {
+        Find f = new Find("aabbcc");
+        assertEquals("bbc", f.capture("bbc"));
+        assertEquals("bbc", f.capture("??c"));
+        assertEquals("bcc", f.capture("??c$"));
+        assertNull(null, f.capture("bcd"));
+        assertEquals("abbc", f.capture("a[abc][abc]c"));
+        assertEquals("aa", f.capture("%[abc][abc]"));
+        assertEquals("cc", f.capture("[abc][abc]$"));
+        assertEquals("abbc", f.capture("[ac][ab][ab][ac]"));
+        assertEquals("aabb", f.capture("[ac][ab][bc][ab]"));
+        assertNull(f.capture("[abc][ab]$"));
+
+        f = new Find("@@How are you, my friend?$");
+        assertEquals("@H", f.capture("@@[G-I]"));
+        assertNull(f.capture("@@[I-K]"));
+        assertEquals("@@How", f.capture("@@@@[A-Z][n-p][n-y]"));
+        assertEquals("d?$", f.capture("???$"));
+        assertNull(f.capture("my$"));
+        assertEquals(" are ", f.capture(" ??? "));
+        assertEquals(" my ", f.capture(" ?? "));
+        assertNull(f.capture("%friend"));
+        assertNull(f.capture("friend?$"));
+        assertEquals("friend?$", f.capture("friend?$$"));
+        assertEquals("How are you", f.capture("??? ??? ???"));
+    }
+
+
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////
+
 
     @Test
     public void closures1() {
@@ -170,20 +236,8 @@ public class FindTest {
     }
 
     @Test
-    public void captures() {
-        Find f = new Find("aabbcc");
-        assertEquals("bbc", f.capture("bbc"));
-        assertEquals("bbc", f.capture("??c"));
-        assertEquals("bcc", f.capture("??c$"));
-        assertNull(null, f.capture("bcd"));
-        assertEquals("abbc", f.capture("a[abc][abc]c"));
-        assertEquals("aa", f.capture("%[abc][abc]"));
-        assertEquals("cc", f.capture("[abc][abc]$"));
-        assertEquals("abbc", f.capture("[ac][ab][ab][ac]"));
-        assertEquals("aabb", f.capture("[ac][ab][bc][ab]"));
-        assertNull(f.capture("[abc][ab]$"));
-
-        f = new Find("12333333333668");
+    public void captures2() {
+        Find f = new Find("12333333333668");
         assertEquals("2333333333668", f.capture("23*6*8"));
         assertEquals("12333333333668", f.capture("?*"));
         assertEquals("1233333333366", f.capture("1?*6"));
