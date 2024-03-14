@@ -17,7 +17,7 @@ public class Find {
 
         for (int i = 0; i < text.length(); i++) {
             if (sonIguales)break;
-            if (text.charAt(i) == listaMatch.get(0).ch || listaMatch.get(0).ch == '®' || listaMatch.get(0).ch == '▓'){
+            if (text.charAt(i) == listaMatch.get(0).ch || listaMatch.get(0).ch == '®' || listaMatch.get(0).ch == '▓' || listaMatch.get(0).ch == '1'){
                 for (int j = 0; j < listaMatch.size(); j++) {
                     if (listaMatch.get(j).ch == '®'){
                         sonIguales = true;
@@ -26,6 +26,21 @@ public class Find {
                     } else if (listaMatch.get(j).ch == '▓') {
                         sonIguales = false;
                         break;
+                    } else if (listaMatch.get(j).ch == '1') {
+                        for (int k = 0; k < text.length(); k++) {
+                            for (int l = 0; l < listaMatch.get(0).set.length(); l++) {
+                                if (text.charAt(k) == listaMatch.get(0).set.charAt(l)){
+                                    for (int m = k+1; m < text.length(); m++) {
+                                        if (text.charAt(m) == listaMatch.get(m).ch){
+                                            sonIguales = true;
+                                        }else {
+                                            sonIguales = false;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     } else if (text.charAt(i+j) != listaMatch.get(j).ch) {
                         sonIguales = false;
                         break;
@@ -78,6 +93,7 @@ public class Find {
                     }
                 }
                 t.ch = checkClaudator(t.set, listaTipos);
+                t.set = checkSet(t.set);
                 listaTipos.add(t);
             } else {
                 CharacterTipo t = new CharacterTipo(CharacterTipo.Tipo.ALFANUMERICO);
@@ -95,18 +111,7 @@ public class Find {
         int contadorText = -1;
 
         if (listaTipos.isEmpty()){
-            for (int i = 0; i < text.length(); i++) {
-                for (int j = 0; j < set.length(); j++) {
-                    if (text.charAt(i) == set.charAt(j)){
-                        letraCorrecta = set.charAt(j);
-                        sonIguales = true;
-                        break;
-                    }else {
-                        letraCorrecta = '▓';
-                    }
-                }
-                if (sonIguales) break;
-            }
+            letraCorrecta = '1';
         }else {
             for (int i = 0; i < text.length(); i++) {
                 if (text.charAt(i) == listaTipos.get(0).ch || listaTipos.get(0).ch == '®' || listaTipos.get(0).ch == '▓'){
@@ -134,10 +139,6 @@ public class Find {
                 }
             }
         }
-
-
-
-
         return letraCorrecta;
     }
 
